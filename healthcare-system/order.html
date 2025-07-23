@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Order Medicines - PulseX Healthcare</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Segoe+UI:wght@400;600&display=swap');
+
+    body {
+      font-family: 'Segoe UI', 'Roboto', 'Helvetica Neue', sans-serif;
+      background: linear-gradient(to right, #0b4e4e, #e6e6e6);
+      color: white;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      height: 100vh;
+      margin: 0;
+      text-align: center;
+      padding-top: 30px;
+    }
+
+    h1 {
+      font-size: 2.5em;
+      margin-bottom: 20px;
+      font-weight: 600;
+    }
+
+    .order-container {
+      background: rgba(255, 255, 255, 0.1);
+      padding: 30px;
+      border-radius: 15px;
+      width: 90%;
+      max-width: 450px;
+      box-shadow: 0 8px 15px rgba(0, 0, 0, 0.15);
+      animation: fadeIn 1s ease-in-out;
+      transition: all 0.3s ease;
+    }
+
+    label {
+      display: block;
+      text-align: left;
+      margin-top: 15px;
+      font-weight: bold;
+      font-size: 1.1em;
+    }
+
+    input,
+    select,
+    textarea {
+      width: 100%;
+      padding: 12px;
+      margin-top: 8px;
+      border: none;
+      border-radius: 6px;
+      font-size: 1.1em;
+      transition: box-shadow 0.3s ease;
+    }
+
+    input:focus,
+    textarea:focus,
+    select:focus {
+      outline: none;
+      box-shadow: 0 0 8px rgba(74, 144, 226, 0.8);
+    }
+
+    .button {
+      background-color: #4a90e2;
+      color: white;
+      border: none;
+      padding: 15px 20px;
+      font-size: 1.2em;
+      border-radius: 25px;
+      cursor: pointer;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+      transition: all 0.3s ease-in-out;
+      margin-top: 20px;
+      width: 100%;
+    }
+
+    .button:hover {
+      background-color: #357abd;
+      transform: translateY(-2px) scale(1.03);
+    }
+
+    .back-container {
+      margin-top: 25px;
+    }
+
+    @keyframes fadeIn {
+      from {
+        opacity: 0;
+        transform: translateY(-20px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <h1>Order Medicines</h1>
+
+  <div class="order-container">
+    <form id="orderForm">
+      <label for="medicineName">Medicine Name:</label>
+      <textarea id="medicineName" name="medicineName" rows="4" readonly></textarea>
+
+      <label for="totalPrice">Total Price:</label>
+      <input type="text" id="totalPrice" name="totalPrice" readonly />
+
+      <label for="address">Delivery Address:</label>
+      <textarea id="address" name="address" rows="3" required></textarea>
+
+      <label for="contact">Contact Number:</label>
+      <input type="tel" id="contact" name="contact" required />
+
+      <label for="payment">Payment Method:</label>
+      <select id="payment" name="payment">
+        <option value="cod">Cash on Delivery</option>
+        <option value="online">Online Payment</option>
+      </select>
+
+      <button type="submit" class="button">Place Order</button>
+    </form>
+  </div>
+
+  <div class="back-container">
+    <a href="index.html">
+      <button class="button">Back to Home</button>
+    </a>
+  </div>
+
+  <script>
+    const cart = JSON.parse(localStorage.getItem("cart")) || [];
+
+    if (cart.length > 0) {
+      let orderDetails = new Set();
+      let totalPrice = 0;
+
+      cart.forEach(item => {
+        const name = item.name || "Unknown Item";
+        const price = parseFloat(item.price) || 0;
+        orderDetails.add(name);
+        totalPrice += price;
+      });
+
+      document.getElementById("medicineName").value = Array.from(orderDetails).join("\n");
+      document.getElementById("totalPrice").value = `₹${totalPrice.toFixed(2)}`;
+    } else {
+      document.getElementById("medicineName").value = "No items in cart.";
+      document.getElementById("totalPrice").value = "₹0.00";
+    }
+
+    document.getElementById("orderForm").addEventListener("submit", function(event) {
+      event.preventDefault();
+
+      const orderData = {
+        medicineNames: document.getElementById("medicineName").value,
+        totalPrice: document.getElementById("totalPrice").value,
+        address: document.getElementById("address").value,
+        contact: document.getElementById("contact").value,
+        payment: document.getElementById("payment").value
+      };
+
+      localStorage.setItem("orderData", JSON.stringify(orderData));
+      localStorage.removeItem("cart");
+      window.location.href = "order-confirmation.html";
+    });
+  </script>
+  <script src='https://cdn.jotfor.ms/s/umd/latest/for-embedded-agent.js'></script>
+  <script>
+      window.addEventListener("DOMContentLoaded", function () {
+          window.AgentInitializer.init({
+              agentRenderURL: "https://agent.jotform.com/01954c3d057e769fa9ac2b0e00cababd8eef",
+              rootId: "JotformAgent-01954c3d057e769fa9ac2b0e00cababd8eef",
+              formID: "01954c3d057e769fa9ac2b0e00cababd8eef",
+              queryParams: ["skipWelcome=1", "maximizable=1"],
+              domain: "https://www.jotform.com",
+              isDraggable: false,
+              background: "linear-gradient(180deg, #642CC7 0%, #642CC7 100%)",
+              buttonBackgroundColor: "#4a90e2",
+              buttonIconColor: "#FFFFFF",
+              variant: false,
+              customizations: {
+                  "greeting": "Yes",
+                  "greetingMessage": "Hi! How can I assist you?",
+                  "openByDefault": "No",
+                  "pulse": "Yes",
+                  "position": "right",
+                  "autoOpenChatIn": "0"
+              },
+              isVoice: undefined
+          });
+      });
+  </script>
+</body>
+</html>

@@ -1,0 +1,369 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Healthcare Chatbot</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      padding: 0;
+      background-color: #f7f8f8;
+      text-align: center;
+      animation: fadeIn 1s ease-in-out;
+    }
+
+    header {
+      background-color: rgb(11, 78, 78);
+      color: rgb(255, 255, 255);
+      padding: 50px 0;
+      position: relative;
+      animation: slideDown 0.8s ease-out;
+    }
+
+    h1 {
+      margin: 0;
+    }
+
+    .pulsex {
+      color: #4a90e2;
+      font-size: 30px;
+      font-weight: bold;
+      margin-top: 10px;
+      animation: glowPulse 1.8s infinite ease-in-out;
+    }
+
+    .home-button {
+      position: absolute;
+      top: 20px;
+      right: 30px;
+      background-color: #080908;
+      color: white;
+      padding: 10px 20px;
+      text-decoration: none;
+      border-radius: 6px;
+      font-size: 14px;
+      transition: all 0.3s ease-in-out;
+    }
+
+    .home-button:hover {
+      background-color: #219150;
+      transform: scale(1.05);
+    }
+
+    .container {
+      width: 85%;
+      margin: auto;
+      padding: 20px;
+    }
+
+    .features {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 20px;
+      margin-top: 20px;
+    }
+
+    .feature {
+      background: white;
+      padding: 20px;
+      border-radius: 10px;
+      box-shadow: 0 0 10px rgba(191, 75, 75, 0.1);
+      transition: transform 0.4s ease-in-out, box-shadow 0.4s ease;
+      animation: popIn 0.6s ease-in;
+    }
+
+    .feature:hover {
+      transform: scale(1.05);
+      box-shadow: 0 0 18px rgba(0, 0, 0, 0.2);
+    }
+
+    .medicine-button {
+      display: inline-block;
+      margin-top: 30px;
+      padding: 14px 28px;
+      background-color: #27ae60;
+      color: white;
+      text-decoration: none;
+      border-radius: 10px;
+      font-size: 18px;
+      font-weight: bold;
+      position: relative;
+      overflow: hidden;
+      transition: transform 0.4s ease;
+    }
+
+    .medicine-button::before {
+      content: "";
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(120deg, transparent, rgba(255,255,255,0.4), transparent);
+      transition: left 0.6s ease;
+    }
+
+    .medicine-button:hover {
+      transform: scale(1.07);
+      background-color: #219150;
+    }
+
+    .medicine-button:hover::before {
+      left: 100%;
+    }
+    .features {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+        gap: 20px;
+        margin-top: 25px;
+      }
+      
+      .spcard {
+        background: #f9f9f9;
+        border-radius: 16px;
+        box-shadow: 0 10px 25px rgba(0, 0, 0, 0.08);
+        padding: 20px;
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+        animation: fadeInUp 0.6s ease forwards;
+        opacity: 0;
+        border-left: 5px solid #4a90e2;
+      }
+      
+      .spcard:hover {
+        transform: translateY(-10px);
+        box-shadow: 0 20px 35px rgba(0, 0, 0, 0.12);
+      }
+      
+      .spcard h3 {
+        margin-bottom: 10px;
+        color: #2c3e50;
+        font-size: 1.2em;
+      }
+      
+      .spcard p {
+        color: #555;
+        line-height: 1.5;
+      }
+      
+      @keyframes fadeInUp {
+        from {
+          transform: translateY(20px);
+          opacity: 0;
+        }
+        to {
+          transform: translateY(0px);
+          opacity: 1;
+        }
+      }
+      
+      .medicine-button {
+        display: inline-block;
+        margin-top: 30px;
+        background-color: #4a90e2;
+        color: white;
+        padding: 12px 25px;
+        border-radius: 8px;
+        text-decoration: none;
+        font-weight: bold;
+        transition: background-color 0.3s ease;
+      }
+      
+      .medicine-button:hover {
+        background-color: #357ABD;
+      }
+      
+.features {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 110px;
+  margin-top: 125px;
+}
+
+.spcard {
+  background: #ffffff;
+  border-radius: 16px;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.08);
+  padding: 20px;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  animation: fadeInUp 0.6s ease forwards;
+  opacity: 0;
+  border-left: 5px solid #4a90e2;
+}
+
+.spcard:hover {
+  transform: translateY(-10px);
+  box-shadow: 0 20px 35px rgba(0, 0, 0, 0.12);
+}
+
+.spcard h3 {
+  margin-bottom: 10px;
+  color: #2c3e50;
+  font-size: 1.2em;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.spcard p {
+  color: #555;
+  line-height: 1.5;
+}
+
+@keyframes fadeInUp {
+  from {
+    transform: translateY(20px);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0px);
+    opacity: 1;
+  }
+}
+
+.medicine-button {
+  display: inline-block;
+  margin-top: 30px;
+  background-color: #4a90e2;
+  color: white;
+  padding: 12px 25px;
+  border-radius: 8px;
+  text-decoration: none;
+  font-weight: bold;
+  transition: background-color 0.3s ease;
+}
+
+.medicine-button:hover {
+  background-color: #357ABD;
+}
+
+.medicine-button i {
+  margin-right: 8px;
+}
+
+    /* Animations */
+   
+
+    @keyframes popIn {
+      from {
+        opacity: 0;
+        transform: scale(0.9);
+      }
+      to {
+        opacity: 1;
+        transform: scale(1);
+      }
+    }
+
+    @keyframes slideDown {
+      0% {
+        transform: translateY(-50px);
+        opacity: 0;
+      }
+      100% {
+        transform: translateY(0);
+        opacity: 1;
+      }
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; }
+      to { opacity: 1; }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>Welcome to Your Healthcare Chatbot</h1>
+    <div class="pulsex">PulseX</div>
+    <a href="hospital.html" class="home-button">Home</a>
+  </header>
+
+  <div class="container">
+    <h1><br>
+        Features</h1>
+    <div class="features">
+      <div class="spcard">
+        <h3><i class="fas fa-stethoscope"></i> Symptom Checker</h3>
+        <p>Get an AI-powered assessment based on your symptoms.</p>
+      </div>
+      <div class="spcard">
+        <h3><i class="fas fa-lightbulb"></i> Health Advice</h3>
+        <p>Receive personalized, expert-backed health recommendations.</p>
+      </div>
+      <div class="spcard">
+        <h3><i class="fas fa-pills"></i> Medicine Recommendations</h3>
+        <p>Find suitable OTC and prescription medicines instantly.</p>
+      </div>
+      <div class="spcard">
+        <h3><i class="fas fa-brain"></i> Mental Health Support</h3>
+        <p>Access emotional support and mental wellness tools.</p>
+      </div>
+      <div class="spcard">
+        <h3><i class="fas fa-question-circle"></i> Medical Query Answering</h3>
+        <p>Ask health-related questions and receive expert answers.</p>
+      </div>
+      <div class="spcard">
+        <h3><i class="fas fa-user-md"></i> Doctor Consultation</h3>
+        <p>Book virtual consultations with licensed professionals.</p>
+      </div>
+      <div class="spcard">
+        <h3><i class="fas fa-ambulance"></i> Emergency Assistance</h3>
+        <p>Access emergency contacts and urgent health support.</p>
+      </div>
+      <div class="spcard">
+        <h3><i class="fas fa-heartbeat"></i> Health Tips</h3>
+        <p>Receive daily tips to maintain and improve your health.</p>
+      </div>
+      <div class="spcard">
+        <h3><i class="fas fa-calendar-check"></i> Health Reminders</h3>
+        <p>Set reminders for medication, checkups, and vaccinations.</p>
+      </div>
+      <div class="spcard">
+        <h3><i class="fas fa-smile"></i> Mood Tracker</h3>
+        <p>Track your mood daily to monitor mental well-being.</p>
+      </div>
+    </div>
+  <p>   <br></p>
+    <a href="index.html" class="medicine-button"><i class="fas fa-capsules"></i> Explore Medicines</a>
+  </div>
+  
+  
+
+  </div>
+  
+
+ 
+
+  <div class="chat-container"></div>
+
+  <script src='https://cdn.jotfor.ms/s/umd/latest/for-embedded-agent.js'></script>
+  <script>
+    window.addEventListener("DOMContentLoaded", function () {
+      window.AgentInitializer.init({
+        agentRenderURL: "https://agent.jotform.com/01954c3d057e769fa9ac2b0e00cababd8eef",
+        rootId: "JotformAgent-01954c3d057e769fa9ac2b0e00cababd8eef",
+        formID: "01954c3d057e769fa9ac2b0e00cababd8eef",
+        queryParams: ["skipWelcome=1", "maximizable=1"],
+        domain: "https://www.jotform.com",
+        isDraggable: false,
+        background: "linear-gradient(180deg, #642CC7 0%, #642CC7 100%)",
+        buttonBackgroundColor: "#4a90e2",
+        buttonIconColor: "#FFFFFF",
+        variant: false,
+        customizations: {
+          "greeting": "Yes",
+          "greetingMessage": "Hi! How can I assist you?",
+          "openByDefault": "No",
+          "pulse": "Yes",
+          "position": "right",
+          "autoOpenChatIn": "0"
+        }
+      });
+    });
+  </script>
+</body>
+</html>

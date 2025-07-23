@@ -1,0 +1,599 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PulseX Healthcare</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: linear-gradient(to right, rgb(11, 78, 78), #e6e6e6);
+            color: white;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin: 0;
+            text-align: center;
+            padding-top: 50px;
+        }
+
+        h1 {
+            font-size: 36px;
+            margin-bottom: 20px;
+        }
+
+        .medicine-container {
+            display: grid;
+            grid-template-columns: repeat(5, 1fr);
+            gap: 50px;
+            padding: 20px;
+            width: 90%;
+            max-width: 1500px;
+        
+            margin-top: 100px;  /* Push it down */
+            margin-right: -15%;   /* Align it slightly to the right */
+        }
+        .medicine-card {
+            background: white;
+            color: black;
+            padding: 15px;
+            border-radius: 10px;
+            text-align: center;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s;
+        }
+
+        .medicine-card:hover {
+            transform: scale(1.05);
+        }
+
+        .medicine-card h3 {
+            margin: 10px 0;
+        }
+
+        .medicine-card p {
+            font-size: 18px;
+            font-weight: bold;
+            color: #6a11cb;
+        }
+
+        .button {
+            background-color: rgb(11, 78, 78);
+            color: white;
+            border: none;
+            padding: 10px 15px;
+            font-size: 16px;
+            border-radius: 20px;
+            cursor: pointer;
+            transition: 0.3s;
+            margin-top: 10px;
+        }
+
+        .button:hover {
+            background-color: #357ABD;
+        }
+
+        .cart-modal {
+            display: none;
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: white;
+            color: black;
+            padding: 40px 50px;
+            border-radius: 20px;
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+            width: 500px;
+            max-width: 90%;
+            text-align: center;
+            z-index: 1000;
+            font-size: 18px;
+        }
+        
+        .cart-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: #f0f0f0;
+            padding: 15px 20px;
+            border-radius: 10px;
+            margin-bottom: 15px;
+            font-size: 17px;
+        }
+        
+        .cart-button {
+            background-color: #4a90e2;
+            color: white;
+            padding: 14px 20px;
+            border-radius: 25px;
+            cursor: pointer;
+            font-weight: bold;
+            font-size: 18px;
+            border: none;
+            display: none;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+        
+        .remove-btn,
+        .close-btn,
+        .order-btn {
+            padding: 10px 18px;
+            font-size: 16px;
+            border-radius: 8px;
+        }
+        
+        .remove-btn {
+            background-color: #ff4d4d;
+        }
+        
+        .close-btn {
+            background-color: #6c757d;
+        }
+        
+        .order-btn {
+            background-color: #28a745;
+        }
+        
+        .remove-btn:hover {
+            background-color: #cc0000;
+        }
+        
+        .order-btn:hover {
+            background-color: #218838;
+        }
+        
+        .cart-container {
+            position: fixed;
+            top: 30px;
+            right: 30px;
+            z-index: 999;
+        }
+        
+        .order-btn {
+            background-color: #28a745;
+            color: white;
+        }
+        
+        .order-btn:hover {
+            background-color: #218838;
+        }
+        
+            .search-container {
+                text-align: center;
+                margin-bottom: 20px;
+            }
+            
+            #search-bar {
+                width: 80%;
+                padding: 10px;
+                margin: 10px 0;
+                border: 1px solid #ccc;
+                border-radius: 5px;
+                font-size: 16px;
+            }
+            h1 {
+                font-family: 'Arial', sans-serif; /* Set font */
+                font-size: 36px; /* Size of the heading */
+                color: rgb(11, 78, 78); /* Green color for text */
+                text-align: center; /* Center align the heading */
+                margin-top: 50px; /* Space at the top */
+                margin-bottom: 20px; /* Space at the bottom */
+                font-weight: bold; /* Make the text bold */
+                text-transform: uppercase; /* Capitalize the letters */
+                letter-spacing: 1.5px; /* Add some spacing between letters */
+                border-bottom: 2px solid #000600; /* Add a green border at the bottom */
+                padding-bottom: 10px; /* Add space below the heading */
+            }
+            .photo-sidebar {
+                position: absolute;
+                top: 300px;
+                left: 10px;
+                display: flex;
+                flex-direction: column;
+                gap: 30px;
+                z-index: 1000;
+                width: auto;
+                animation: fadeIn 1s ease-in-out;
+            }
+            
+            /* Animation: Fade In */
+            @keyframes fadeIn {
+                from {
+                    opacity: 0;
+                    transform: translateX(-50px);
+                }
+                to {
+                    opacity: 1;
+                    transform: translateX(0);
+                }
+            }
+            
+            .photo-sidebar img {
+                width: 280px;
+                height: auto;
+                border-radius: 12px;
+                box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+                transition: transform 0.3s ease, box-shadow 0.3s ease;
+                opacity: 0;
+                animation: slideIn 0.8s ease forwards;
+            }
+            
+            /* Animate images one after another */
+            .photo-sidebar img:nth-child(1) { animation-delay: 0.1s; }
+            .photo-sidebar img:nth-child(2) { animation-delay: 0.2s; }
+            .photo-sidebar img:nth-child(3) { animation-delay: 0.3s; }
+            .photo-sidebar img:nth-child(4) { animation-delay: 0.4s; }
+            .photo-sidebar img:nth-child(5) { animation-delay: 0.5s; }
+            .photo-sidebar img:nth-child(6) { animation-delay: 0.6s; }
+            .photo-sidebar img:nth-child(7) { animation-delay: 0.7s; }
+            .photo-sidebar img:nth-child(8) { animation-delay: 0.8s; }
+            .photo-sidebar img:nth-child(9) { animation-delay: 0.9s; }
+            .photo-sidebar img:nth-child(10) { animation-delay: 1.0s; }
+            
+            @keyframes slideIn {
+                from {
+                    transform: translateX(-20px);
+                    opacity: 0;
+                }
+                to {
+                    transform: translateX(0);
+                    opacity: 1;
+                }
+            }
+            
+            /* Hover effect */
+            .photo-sidebar img:hover {
+                transform: scale(1.05);
+                box-shadow: 0 8px 25px rgba(0, 0, 0, 0.3);
+                cursor: pointer;
+            }
+            
+              
+            
+        
+    </style>
+</head>
+
+<body>
+    <h1>Order Medicines</h1>
+    <!-- Search Bar -->
+<div class="search-container">
+    <input type="text" id="search-bar" placeholder="Search for medicines..." onkeyup="searchMedicine()">
+</div>
+<script>
+    // Search Medicine Function
+    function searchMedicine() {
+        const searchInput = document.getElementById('search-bar').value.toLowerCase();
+        const medicineCards = document.getElementsByClassName('medicine-card');
+        
+        // Loop through all medicine cards
+        for (let i = 0; i < medicineCards.length; i++) {
+            const medicineCard = medicineCards[i];
+            const medicineName = medicineCard.getElementsByTagName('h3')[0].textContent.toLowerCase();
+            
+            if (medicineName.includes(searchInput)) {
+                medicineCard.style.display = ''; // Show card if matches
+            } else {
+                medicineCard.style.display = 'none'; // Hide card if no match
+            }
+        }
+    }
+</script>
+ <div class="photo-sidebar">
+    <img src="photo1.jpg" alt="Photo 1">
+    <img src="photo2.jpg" alt="Photo 2">
+    <img src="photo3.jpg" alt="Photo 3">
+    <img src="photo4.jpg" alt="Photo 4">
+    <img src="photo5.jpg" alt="Photo 5">
+    <img src="photo6.jpg" alt="Photo 6">
+    <img src="photo7.jpg" alt="Photo 7">
+    <img src="photo8.jpg" alt="Photo 8">
+    <img src="photo9.jpg" alt="Photo 9">
+    <img src="photo10.jpg" alt="Photo 10">
+    <img src="photo2.jpg" alt="Photo 2">
+    <img src="photo3.jpg" alt="Photo 3">
+    <img src="photo4.jpg" alt="Photo 4">
+    <img src="photo5.jpg" alt="Photo 5">
+    <img src="photo2.jpg" alt="Photo 2">
+  </div>
+
+   
+    
+    
+
+    <!-- Cart Button -->
+    <div class="cart-container">
+        <button class="cart-button" id="view-cart">View Cart (<span id="cart-count">0</span>)</button>
+    </div>
+
+   <!-- Medicine List -->
+<div class="medicine-container">
+    <div class="medicine-card"><h3>Paracetamol 500mg</h3><p>₹20</p><button class="button add-to-cart" data-name="Paracetamol 500mg" data-price="20">Add to Cart</button></div>
+    <div class="medicine-card"><h3>Ibuprofen 400mg</h3><p>₹30</p><button class="button add-to-cart" data-name="Ibuprofen 400mg" data-price="30">Add to Cart</button></div>
+    <div class="medicine-card"><h3>Amoxicillin 500mg</h3><p>₹50</p><button class="button add-to-cart" data-name="Amoxicillin 500mg" data-price="50">Add to Cart</button></div>
+    <div class="medicine-card"><h3>Cetirizine 10mg</h3><p>₹15</p><button class="button add-to-cart" data-name="Cetirizine 10mg" data-price="15">Add to Cart</button></div>
+    <div class="medicine-card"><h3>Omeprazole 20mg</h3><p>₹18</p><button class="button add-to-cart" data-name="Omeprazole 20mg" data-price="18">Add to Cart</button></div>
+    <div class="medicine-card"><h3>Azithromycin 500mg</h3><p>₹60</p><button class="button add-to-cart" data-name="Azithromycin 500mg" data-price="60">Add to Cart</button></div>
+    <div class="medicine-card"><h3>Diclofenac 50mg</h3><p>₹28</p><button class="button add-to-cart" data-name="Diclofenac 50mg" data-price="28">Add to Cart</button></div>
+    <div class="medicine-card"><h3>Losartan 50mg</h3><p>₹40</p><button class="button add-to-cart" data-name="Losartan 50mg" data-price="40">Add to Cart</button></div>
+    <div class="medicine-card"><h3>Aspirin 75mg</h3><p>₹25</p><button class="button add-to-cart" data-name="Aspirin 75mg" data-price="25">Add to Cart</button></div>
+    <div class="medicine-card"><h3>Clopidogrel 75mg</h3><p>₹45</p><button class="button add-to-cart" data-name="Clopidogrel 75mg" data-price="45">Add to Cart</button></div>
+    <div class="medicine-card"><h3>Metoprolol 50mg</h3><p>₹32</p><button class="button add-to-cart" data-name="Metoprolol 50mg" data-price="32">Add to Cart</button></div>
+    <div class="medicine-card"><h3>Simvastatin 10mg</h3><p>₹38</p><button class="button add-to-cart" data-name="Simvastatin 10mg" data-price="38">Add to Cart</button></div>
+    <div class="medicine-card"><h3>Ranitidine 150mg</h3><p>₹22</p><button class="button add-to-cart" data-name="Ranitidine 150mg" data-price="22">Add to Cart</button></div>
+    <div class="medicine-card"><h3>Fexofenadine 120mg</h3><p>₹29</p><button class="button add-to-cart" data-name="Fexofenadine 120mg" data-price="29">Add to Cart</button></div>
+  
+    <!-- Additional 30 Medicines -->
+    <div class="medicine-card"><h3>Loratadine 10mg</h3><p>₹17</p><button class="button add-to-cart" data-name="Loratadine 10mg" data-price="17">Add to Cart</button></div>
+    <div class="medicine-card"><h3>Montelukast 10mg</h3><p>₹33</p><button class="button add-to-cart" data-name="Montelukast 10mg" data-price="33">Add to Cart</button></div>
+    <div class="medicine-card"><h3>Atorvastatin 20mg</h3><p>₹42</p><button class="button add-to-cart" data-name="Atorvastatin 20mg" data-price="42">Add to Cart</button></div>
+    <div class="medicine-card"><h3>Levocetirizine 5mg</h3><p>₹14</p><button class="button add-to-cart" data-name="Levocetirizine 5mg" data-price="14">Add to Cart</button></div>
+    <div class="medicine-card"><h3>Fluconazole 150mg</h3><p>₹39</p><button class="button add-to-cart" data-name="Fluconazole 150mg" data-price="39">Add to Cart</button></div>
+    <div class="medicine-card"><h3>Doxycycline 100mg</h3><p>₹36</p><button class="button add-to-cart" data-name="Doxycycline 100mg" data-price="36">Add to Cart</button></div>
+    <div class="medicine-card"><h3>Metformin 500mg</h3><p>₹27</p><button class="button add-to-cart" data-name="Metformin 500mg" data-price="27">Add to Cart</button></div>
+    <div class="medicine-card"><h3>Glibenclamide 5mg</h3><p>₹23</p><button class="button add-to-cart" data-name="Glibenclamide 5mg" data-price="23">Add to Cart</button></div>
+    <div class="medicine-card"><h3>Hydrochlorothiazide 25mg</h3><p>₹21</p><button class="button add-to-cart" data-name="Hydrochlorothiazide 25mg" data-price="21">Add to Cart</button></div>
+    <div class="medicine-card"><h3>Enalapril 5mg</h3><p>₹26</p><button class="button add-to-cart" data-name="Enalapril 5mg" data-price="26">Add to Cart</button></div>
+    <div class="medicine-card"><h3>Lisinopril 10mg</h3><p>₹30</p><button class="button add-to-cart" data-name="Lisinopril 10mg" data-price="30">Add to Cart</button></div>
+    <div class="medicine-card"><h3>Prednisone 10mg</h3><p>₹35</p><button class="button add-to-cart" data-name="Prednisone 10mg" data-price="35">Add to Cart</button></div>
+    <div class="medicine-card"><h3>Alprazolam 0.5mg</h3><p>₹19</p><button class="button add-to-cart" data-name="Alprazolam 0.5mg" data-price="19">Add to Cart</button></div>
+    <div class="medicine-card"><h3>Diazepam 5mg</h3><p>₹24</p><button class="button add-to-cart" data-name="Diazepam 5mg" data-price="24">Add to Cart</button></div>
+    <div class="medicine-card"><h3>Insulin Glargine</h3><p>₹180</p><button class="button add-to-cart" data-name="Insulin Glargine" data-price="180">Add to Cart</button></div>
+    <div class="medicine-card"><h3>Salbutamol Inhaler</h3><p>₹75</p><button class="button add-to-cart" data-name="Salbutamol Inhaler" data-price="75">Add to Cart</button></div>
+    <div class="medicine-card"><h3>Levothyroxine 50mcg</h3><p>₹16</p><button class="button add-to-cart" data-name="Levothyroxine 50mcg" data-price="16">Add to Cart</button></div>
+    <div class="medicine-card"><h3>Calcium + D3 Tablets</h3><p>₹40</p><button class="button add-to-cart" data-name="Calcium + D3 Tablets" data-price="40">Add to Cart</button></div>
+    <div class="medicine-card"><h3>Vitamin C 500mg</h3><p>₹12</p><button class="button add-to-cart" data-name="Vitamin C 500mg" data-price="12">Add to Cart</button></div>
+    <div class="medicine-card"><h3>Multivitamin Tablets</h3><p>₹55</p><button class="button add-to-cart" data-name="Multivitamin Tablets" data-price="55">Add to Cart</button></div>
+    <div class="medicine-card"><h3>Iron Folic Acid</h3><p>₹20</p><button class="button add-to-cart" data-name="Iron Folic Acid" data-price="20">Add to Cart</button></div>
+    <div class="medicine-card"><h3>ORS Sachets</h3><p>₹10</p><button class="button add-to-cart" data-name="ORS Sachets" data-price="10">Add to Cart</button></div>
+    <div class="medicine-card"><h3>Electral Powder</h3><p>₹8</p><button class="button add-to-cart" data-name="Electral Powder" data-price="8">Add to Cart</button></div>
+    <div class="medicine-card"><h3>Chlorpheniramine 4mg</h3><p>₹13</p><button class="button add-to-cart" data-name="Chlorpheniramine 4mg" data-price="13">Add to Cart</button></div>
+    <div class="medicine-card"><h3>Domperidone 10mg</h3><p>₹22</p><button class="button add-to-cart" data-name="Domperidone 10mg" data-price="22">Add to Cart</button></div>
+    <div class="medicine-card"><h3>Ondansetron 4mg</h3><p>₹28</p><button class="button add-to-cart" data-name="Ondansetron 4mg" data-price="28">Add to Cart</button></div>
+    <div class="medicine-card"><h3>Meclizine 25mg</h3><p>₹18</p><button class="button add-to-cart" data-name="Meclizine 25mg" data-price="18">Add to Cart</button></div>
+    <div class="medicine-card"><h3>Betadine Ointment</h3><p>₹36</p><button class="button add-to-cart" data-name="Betadine Ointment" data-price="36">Add to Cart</button></div>
+    <div class="medicine-card"><h3>Cough Syrup 100ml</h3><p>₹45</p><button class="button add-to-cart" data-name="Cough Syrup 100ml" data-price="45">Add to Cart</button></div>
+    <div class="medicine-card"><h3>Loratadine 10mg</h3><p>₹19</p><button class="button add-to-cart" data-name="Loratadine 10mg" data-price="19">Add to Cart</button></div>
+    <div class="medicine-card"><h3>Montelukast 10mg</h3><p>₹35</p><button class="button add-to-cart" data-name="Montelukast 10mg" data-price="35">Add to Cart</button></div>
+    <div class="medicine-card"><h3>Doxycycline 100mg</h3><p>₹42</p><button class="button add-to-cart" data-name="Doxycycline 100mg" data-price="42">Add to Cart</button></div>
+    <div class="medicine-card"><h3>Levofloxacin 500mg</h3><p>₹48</p><button class="button add-to-cart" data-name="Levofloxacin 500mg" data-price="48">Add to Cart</button></div>
+    <div class="medicine-card"><h3>Hydroxychloroquine 200mg</h3><p>₹55</p><button class="button add-to-cart" data-name="Hydroxychloroquine 200mg" data-price="55">Add to Cart</button></div>
+    <div class="medicine-card"><h3>Prednisolone 10mg</h3><p>₹22</p><button class="button add-to-cart" data-name="Prednisolone 10mg" data-price="22">Add to Cart</button></div>
+    <div class="medicine-card"><h3>Vitamin C 500mg</h3><p>₹12</p><button class="button add-to-cart" data-name="Vitamin C 500mg" data-price="12">Add to Cart</button></div>
+    <div class="medicine-card"><h3>Calcium Carbonate 500mg</h3><p>₹18</p><button class="button add-to-cart" data-name="Calcium Carbonate 500mg" data-price="18">Add to Cart</button></div>
+    <div class="medicine-card"><h3>Ferrous Sulfate 100mg</h3><p>₹20</p><button class="button add-to-cart" data-name="Ferrous Sulfate 100mg" data-price="20">Add to Cart</button></div>
+    <div class="medicine-card"><h3>Folic Acid 5mg</h3><p>₹14</p><button class="button add-to-cart" data-name="Folic Acid 5mg" data-price="14">Add to Cart</button></div>
+    <div class="medicine-card"><h3>Multivitamin Tablets</h3><p>₹25</p><button class="button add-to-cart" data-name="Multivitamin Tablets" data-price="25">Add to Cart</button></div>
+    <div class="medicine-card"><h3>Magnesium Hydroxide</h3><p>₹16</p><button class="button add-to-cart" data-name="Magnesium Hydroxide" data-price="16">Add to Cart</button></div>
+    <div class="medicine-card"><h3>Domperidone 10mg</h3><p>₹21</p><button class="button add-to-cart" data-name="Domperidone 10mg" data-price="21">Add to Cart</button></div>
+    <div class="medicine-card"><h3>Rabeprazole 20mg</h3><p>₹24</p><button class="button add-to-cart" data-name="Rabeprazole 20mg" data-price="24">Add to Cart</button></div>
+    <div class="medicine-card"><h3>Esomeprazole 40mg</h3><p>₹28</p><button class="button add-to-cart" data-name="Esomeprazole 40mg" data-price="28">Add to Cart</button></div>
+    <div class="medicine-card"><h3>Lansoprazole 30mg</h3><p>₹27</p><button class="button add-to-cart" data-name="Lansoprazole 30mg" data-price="27">Add to Cart</button></div>
+    <div class="medicine-card"><h3>Rifaximin 200mg</h3><p>₹49</p><button class="button add-to-cart" data-name="Rifaximin 200mg" data-price="49">Add to Cart</button></div>
+    <div class="medicine-card"><h3>Ondansetron 4mg</h3><p>₹26</p><button class="button add-to-cart" data-name="Ondansetron 4mg" data-price="26">Add to Cart</button></div>
+    <div class="medicine-card"><h3>Loperamide 2mg</h3><p>₹17</p><button class="button add-to-cart" data-name="Loperamide 2mg" data-price="17">Add to Cart</button></div>
+    <div class="medicine-card"><h3>Metformin 500mg</h3><p>₹35</p><button class="button add-to-cart" data-name="Metformin 500mg" data-price="35">Add to Cart</button></div>
+    <div class="medicine-card"><h3>Glibenclamide 5mg</h3><p>₹29</p><button class="button add-to-cart" data-name="Glibenclamide 5mg" data-price="29">Add to Cart</button></div>
+    <div class="medicine-card"><h3>Insulin Injection</h3><p>₹120</p><button class="button add-to-cart" data-name="Insulin Injection" data-price="120">Add to Cart</button></div>
+    <div class="medicine-card"><h3>Thyroxine 25mcg</h3><p>₹15</p><button class="button add-to-cart" data-name="Thyroxine 25mcg" data-price="15">Add to Cart</button></div>
+    <div class="medicine-card"><h3>Levothyroxine 50mcg</h3><p>₹18</p><button class="button add-to-cart" data-name="Levothyroxine 50mcg" data-price="18">Add to Cart</button></div>
+    <div class="medicine-card"><h3>Atorvastatin 10mg</h3><p>₹33</p><button class="button add-to-cart" data-name="Atorvastatin 10mg" data-price="33">Add to Cart</button></div>
+    <div class="medicine-card"><h3>Rosuvastatin 5mg</h3><p>₹34</p><button class="button add-to-cart" data-name="Rosuvastatin 5mg" data-price="34">Add to Cart</button></div>
+    <div class="medicine-card"><h3>Amlodipine 5mg</h3><p>₹23</p><button class="button add-to-cart" data-name="Amlodipine 5mg" data-price="23">Add to Cart</button></div>
+    <div class="medicine-card"><h3>Enalapril 10mg</h3><p>₹36</p><button class="button add-to-cart" data-name="Enalapril 10mg" data-price="36">Add to Cart</button></div>
+    <div class="medicine-card"><h3>Telmisartan 40mg</h3><p>₹41</p><button class="button add-to-cart" data-name="Telmisartan 40mg" data-price="41">Add to Cart</button></div>
+    <div class="medicine-card"><h3>Hydrochlorothiazide 25mg</h3><p>₹20</p><button class="button add-to-cart" data-name="Hydrochlorothiazide 25mg" data-price="20">Add to Cart</button></div>
+    <div class="medicine-card"><h3>Atenolol 50mg</h3><p>₹28</p><button class="button add-to-cart" data-name="Atenolol 50mg" data-price="28">Add to Cart</button></div>
+    <div class="medicine-card"><h3>Propranolol 40mg</h3><p>₹26</p><button class="button add-to-cart" data-name="Propranolol 40mg" data-price="26">Add to Cart</button></div>
+    <div class="medicine-card"><h3>Clonazepam 0.5mg</h3><p>₹39</p><button class="button add-to-cart" data-name="Clonazepam 0.5mg" data-price="39">Add to Cart</button></div>
+    <div class="medicine-card"><h3>Diazepam 5mg</h3><p>₹24</p><button class="button add-to-cart" data-name="Diazepam 5mg" data-price="24">Add to Cart</button></div>
+    <div class="medicine-card"><h3>Sertraline 50mg</h3><p>₹44</p><button class="button add-to-cart" data-name="Sertraline 50mg" data-price="44">Add to Cart</button></div>
+    <div class="medicine-card"><h3>Fluoxetine 20mg</h3><p>₹38</p><button class="button add-to-cart" data-name="Fluoxetine 20mg" data-price="38">Add to Cart</button></div>
+    <div class="medicine-card"><h3>Olanzapine 5mg</h3><p>₹46</p><button class="button add-to-cart" data-name="Olanzapine 5mg" data-price="46">Add to Cart</button></div>
+    <div class="medicine-card"><h3>Haloperidol 1.5mg</h3><p>₹37</p><button class="button add-to-cart" data-name="Haloperidol 1.5mg" data-price="37">Add to Cart</button></div>
+    <div class="medicine-card"><h3>Risperidone 2mg</h3><p>₹43</p><button class="button add-to-cart" data-name="Risperidone 2mg" data-price="43">Add to Cart</button></div>
+    <div class="medicine-card"><h3>Carbamazepine 200mg</h3><p>₹40</p><button class="button add-to-cart" data-name="Carbamazepine 200mg" data-price="40">Add to Cart</button></div>
+    <div class="medicine-card"><h3>Valproic Acid 300mg</h3><p>₹50</p><button class="button add-to-cart" data-name="Valproic Acid 300mg" data-price="50">Add to Cart</button></div>
+    <div class="medicine-card"><h3>Phenobarbital 30mg</h3><p>₹36</p><button class="button add-to-cart" data-name="Phenobarbital 30mg" data-price="36">Add to Cart</button></div>
+    <div class="medicine-card"><h3>Phenytoin 100mg</h3><p>₹34</p><button class="button add-to-cart" data-name="Phenytoin 100mg" data-price="34">Add to Cart</button></div>
+    <div class="medicine-card"><h3>Gabapentin 300mg</h3><p>₹52</p><button class="button add-to-cart" data-name="Gabapentin 300mg" data-price="52">Add to Cart</button></div>
+    <div class="medicine-card"><h3>Tramadol 50mg</h3><p>₹31</p><button class="button add-to-cart" data-name="Tramadol 50mg" data-price="31">Add to Cart</button></div>
+    <div class="medicine-card"><h3>Codeine Phosphate 15mg</h3><p>₹48</p><button class="button add-to-cart" data-name="Codeine Phosphate 15mg" data-price="48">Add to Cart</button></div>
+    <div class="medicine-card"><h3>Amlodipine 5mg</h3><p>₹23</p><button class="button add-to-cart" data-name="Amlodipine 5mg" data-price="23">Add to Cart</button></div>
+
+</div>
+  
+
+   <!-- Cart Button Container -->
+<div class="cart-container">
+    <button id="view-cart" class="cart-button">
+        🛒 Cart (<span id="cart-count">0</span>)
+    </button>
+</div>
+
+<!-- Cart Modal -->
+<div class="cart-modal" id="cart-modal">
+    <h2>Your Cart</h2>
+    <div id="cart-items"></div>
+    <p><strong>Total: ₹<span id="total-price">0</span></strong></p>
+    <button class="close-btn" onclick="closeCart()">Close</button>
+    <button class="order-btn" id="order-medicines">Order Now</button>
+</div>
+
+<!-- Add to Cart Buttons (Example) -->
+<!-- <button class="add-to-cart" data-name="Paracetamol" data-price="50">Add Paracetamol</button> -->
+
+<!-- JavaScript -->
+<script>
+    function updateCartCount() {
+        const cart = JSON.parse(localStorage.getItem("cart")) || [];
+        document.getElementById("cart-count").innerText = cart.length;
+        document.getElementById("view-cart").style.display = cart.length > 0 ? "flex" : "none";
+    }
+
+    function addToCart(event) {
+        const name = event.target.getAttribute("data-name");
+        const price = parseInt(event.target.getAttribute("data-price"));
+        let cart = JSON.parse(localStorage.getItem("cart")) || [];
+        cart.push({ name, price });
+        localStorage.setItem("cart", JSON.stringify(cart));
+        updateCartCount();
+    }
+
+    function showCart() {
+        const cart = JSON.parse(localStorage.getItem("cart")) || [];
+        const cartItemsContainer = document.getElementById("cart-items");
+        const totalPrice = document.getElementById("total-price");
+        cartItemsContainer.innerHTML = "";
+        let total = 0;
+
+        cart.forEach((item, index) => {
+            const div = document.createElement("div");
+            div.className = "cart-item";
+            div.innerHTML = `
+                <span>${item.name} - ₹${item.price}</span>
+                <button class="remove-btn" data-index="${index}">Remove</button>
+            `;
+            cartItemsContainer.appendChild(div);
+            total += item.price;
+        });
+
+        totalPrice.innerText = total;
+        document.getElementById("cart-modal").style.display = "block";
+
+        document.querySelectorAll(".remove-btn").forEach(button => {
+            button.addEventListener("click", removeFromCart);
+        });
+    }
+
+    function removeFromCart(event) {
+        let cart = JSON.parse(localStorage.getItem("cart")) || [];
+        const index = parseInt(event.target.getAttribute("data-index"));
+        cart.splice(index, 1);
+        localStorage.setItem("cart", JSON.stringify(cart));
+        showCart();
+        updateCartCount();
+    }
+
+    function closeCart() {
+        document.getElementById("cart-modal").style.display = "none";
+    }
+
+    document.querySelectorAll(".add-to-cart").forEach(button => {
+        button.addEventListener("click", addToCart);
+    });
+
+    document.getElementById("view-cart").addEventListener("click", showCart);
+
+    document.getElementById("order-medicines").addEventListener("click", function () {
+        const cart = JSON.parse(localStorage.getItem("cart")) || [];
+        localStorage.setItem("cart", JSON.stringify(cart));
+        window.location.href = "order.html";
+    });
+
+    updateCartCount();
+</script>
+
+<div style="text-align: center; margin: 20px;">
+    <button class="button" onclick="window.location.href='order.html'">Order Now</button>
+</div>
+<!-- Menu Button -->
+<div class="menu-container">
+    <a href="hospital.html"><button class="menu-button">HOME</button></a>
+   
+    </div>
+</div>
+
+<style>
+    .menu-container {
+        position: absolute;
+        top: 10px;
+        left: 10px;
+    }
+
+    .menu-button {
+        background-color: #4a90e2;
+        color: white;
+        border: none;
+        padding: 10px 15px;
+        font-size: 16px;
+        border-radius: 5px;
+        cursor: pointer;
+    }
+
+    .dropdown-menu {
+        display: none;
+        position: absolute;
+        background: white;
+        border-radius: 5px;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        width: 150px;
+        top: 40px;
+        left: 0;
+        z-index: 1000;
+    }
+
+    .dropdown-menu a {
+        display: block;
+        padding: 10px;
+        color: black;
+        text-decoration: none;
+        border-bottom: 1px solid #ddd;
+    }
+
+    .dropdown-menu a:hover {
+        background: #f1f1f1;
+    }
+
+    .menu-container:hover .dropdown-menu {
+        display: block;
+    }
+</style>
+
+<script>
+    function openChat() {
+        alert("Chatbot Opening..."); // Replace this with chatbot opening logic
+    }
+</script>
+<div class="chat-container">
+    </div>
+<body>
+    <div class="container">
+            </div>
+    <div class="chat-container">
+        
+    </div>
+
+    <script src='https://cdn.jotfor.ms/s/umd/latest/for-embedded-agent.js'></script>
+    <script>
+        window.addEventListener("DOMContentLoaded", function () {
+            window.AgentInitializer.init({
+                agentRenderURL: "https://agent.jotform.com/01954c3d057e769fa9ac2b0e00cababd8eef",
+                rootId: "JotformAgent-01954c3d057e769fa9ac2b0e00cababd8eef",
+                formID: "01954c3d057e769fa9ac2b0e00cababd8eef",
+                queryParams: ["skipWelcome=1", "maximizable=1"],
+                domain: "https://www.jotform.com",
+                isDraggable: false,
+                background: "linear-gradient(180deg, #642CC7 0%, #642CC7 100%)",
+                buttonBackgroundColor: "#4a90e2",
+                buttonIconColor: "#FFFFFF",
+                variant: false,
+                customizations: {
+                    "greeting": "Yes",
+                    "greetingMessage": "Hi! How can I assist you?",
+                    "openByDefault": "No",
+                    "pulse": "Yes",
+                    "position": "right",
+                    "autoOpenChatIn": "0"
+                },
+                isVoice: undefined
+            });
+        });
+    </script>
+
+
+</body>
+
+</html>

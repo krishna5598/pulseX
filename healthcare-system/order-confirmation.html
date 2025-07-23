@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Order Confirmation - PulseX Healthcare</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Segoe+UI:wght@400;600&display=swap');
+
+    body {
+      font-family: 'Segoe UI', 'Roboto', sans-serif;
+      background: linear-gradient(to right, #0b4e4e, #e6e6e6);
+      color: rgb(0, 0, 0);
+      text-align: center;
+      padding: 40px 20px;
+      margin: 0;
+    }
+
+    h1 {
+      font-size: 2.5em;
+      margin-bottom: 20px;
+    }
+
+    h2 {
+      font-size: 1.8em;
+      margin-bottom: 15px;
+    }
+
+    .confirmation-container {
+      background: rgba(255, 255, 255, 0.1);
+      padding: 25px;
+      border-radius: 15px;
+      max-width: 500px;
+      margin: auto;
+      box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
+    }
+
+    .details {
+      text-align: left;
+      margin-top: 10px;
+      padding: 15px;
+      background: rgba(255, 255, 255, 0.2);
+      border-radius: 8px;
+      font-size: 1.1em;
+    }
+
+    .details p {
+      margin: 10px 0;
+    }
+
+    .button {
+      background-color: #0b4e4e;
+      color: white;
+      padding: 12px 25px;
+      font-size: 1.1em;
+      border: none;
+      border-radius: 25px;
+      cursor: pointer;
+      margin-top: 20px;
+      display: inline-block;
+      transition: background-color 0.3s ease;
+    }
+
+    .button:hover {
+      background-color: #357ABD;
+    }
+  </style>
+</head>
+
+<body>
+
+  <h1>Order Confirmed ✅</h1>
+
+  <div class="confirmation-container">
+    <h2>Order Details</h2>
+    <div class="details">
+      <p><strong>Medicines:</strong><br><span id="medicineList"></span></p>
+      <p><strong>Total Price:</strong> <span id="totalPrice"></span></p>
+      <p><strong>Delivery Address:</strong> <span id="address"></span></p>
+      <p><strong>Contact:</strong> <span id="contact"></span></p>
+      <p><strong>Payment Method:</strong> <span id="payment"></span></p>
+    </div>
+    <a href="index.html" class="button">Back to Home</a>
+  </div>
+
+  <script>
+    const orderData = JSON.parse(localStorage.getItem("orderData"));
+
+    if (orderData) {
+      document.getElementById("medicineList").innerText = orderData.medicineNames;
+      document.getElementById("totalPrice").innerText = orderData.totalPrice;
+      document.getElementById("address").innerText = orderData.address;
+      document.getElementById("contact").innerText = orderData.contact;
+      document.getElementById("payment").innerText = orderData.payment;
+    } else {
+      document.querySelector(".confirmation-container").innerHTML = "<h2>No Order Found</h2>";
+    }
+  </script>
+
+  <script src='https://cdn.jotfor.ms/s/umd/latest/for-embedded-agent.js'></script>
+  <script>
+    window.addEventListener("DOMContentLoaded", function () {
+      window.AgentInitializer.init({
+        agentRenderURL: "https://agent.jotform.com/01954c3d057e769fa9ac2b0e00cababd8eef",
+        rootId: "JotformAgent-01954c3d057e769fa9ac2b0e00cababd8eef",
+        formID: "01954c3d057e769fa9ac2b0e00cababd8eef",
+        queryParams: ["skipWelcome=1", "maximizable=1"],
+        domain: "https://www.jotform.com",
+        isDraggable: false,
+        background: "linear-gradient(180deg, #642CC7 0%, #642CC7 100%)",
+        buttonBackgroundColor: "#4a90e2",
+        buttonIconColor: "#FFFFFF",
+        variant: false,
+        customizations: {
+          "greeting": "Yes",
+          "greetingMessage": "Hi! How can I assist you?",
+          "openByDefault": "No",
+          "pulse": "Yes",
+          "position": "right",
+          "autoOpenChatIn": "0"
+        },
+        isVoice: undefined
+      });
+    });
+  </script>
+
+</body>
+</html>
